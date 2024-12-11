@@ -24,3 +24,15 @@ Index the right event parameters to enable efficient filtering and searching. Ad
 Avoid redundant events by not emitting events that are already covered by underlying libraries or contracts.
 Events cannot be used in view or pure functions, as they alter the state of the blockchain by storing logs.
 Be mindful of the gas cost associated with emitting events, especially when indexing parameters, as it can impact the overall gas consumption of your contract.
+
+# Inheritance
+
+Solidity supports multiple inheritance. Contracts can inherit other contract by using the is keyword.
+
+Function that is going to be overridden by a child contract must be declared as virtual.
+
+Function that is going to override a parent function must use the keyword override.
+
+Order of inheritance is important.
+
+You have to list the parent contracts in the order from “most base-like” to “most derived”.
