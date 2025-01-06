@@ -1,0 +1,12 @@
+After Upgradeable Proxy:
+Deploy Any Contract 
+Write to Any Slot
+
+2nd example in delegatecall hack
+
+
+NOT INCLUDED:
+Uni-Directional Payment Channel - Payment channels allow participants to repeatedly transfer Ether off chain.
+Bi-Directional Payment Channel - Bi-directional payment channels allow participants Alice and Bob to repeatedly transfer Ether off chain.
+
+
