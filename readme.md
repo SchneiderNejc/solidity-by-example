@@ -246,4 +246,88 @@ TimeLock is a contract that publishes a transaction to be executed in the future
 TimeLocks are commonly used in DAOs.
 
 
+HACKS
 
+# Re-Entrancy
+Vulnerability
+Let's say that contract A calls contract B.
+Reentracy exploit allows B to call back into A before A finishes execution.
+Note: Reentrancy is possible on an erc20-based transfers as well.
+
+Preventative Techniques
+Ensure all state changes happen before calling external contracts
+Use function modifiers that prevent re-entrancy
+
+# Arithmetic Overflow and Underflow
+Vulnerability
+Solidity < 0.8
+Integers in Solidity overflow / underflow without any errors
+
+Solidity >= 0.8
+Default behaviour of Solidity 0.8 for overflow / underflow is to throw an error.
+
+Preventative Techniques
+Use SafeMath to will prevent arithmetic overflow and underflow
+
+# Self Destruct
+Contracts can be deleted from the blockchain by calling selfdestruct.
+
+selfdestruct sends all remaining Ether stored in the contract to a designated address.
+
+Vulnerability
+A malicious contract can use selfdestruct to force sending Ether to any contract.
+Preventative Techniques
+Don't rely on address(this).balance
+
+# Accessing Private Data
+Vulnerability
+All data on a smart contract can be read, even on unverified contract.
+
+Preventative Techniques
+Don't store sensitive information on the blockchain.
+
+# Delegatecall
+
+Vulnerability
+delegatecall is tricky to use and wrong usage or incorrect understanding can lead to devastating results.
+
+You must keep 2 things in mind when using delegatecall
+
+delegatecall preserves context (storage, caller, etc...)
+storage layout must be the same for the contract calling delegatecall and the contract getting called
+
+Preventative Techniques
+Use stateless Library
+
+# Source of randomness
+
+Vulnerability
+blockhash and block.timestamp are not reliable sources for randomness.
+
+Preventative Techniques
+Don't use blockhash and block.timestamp as source of randomness
+
+The vulnerability arises because blockhash and block.timestamp are publicly accessible and deterministic.
+Both methods (JavaScript computation or reading storage slots) can bypass the need for deploying the Attack contract, demonstrating how easily the contract's logic can be exploited.
+
+
+# Denial of Service
+
+Vulnerability
+There are many ways to attack a smart contract to make it unusable.
+
+One exploit we introduce here is denial of service by making the function to send Ether fail.
+
+Preventative Techniques
+One way to prevent this is to allow the users to withdraw their Ether instead of sending it.
+
+# Phishing with tx.origin
+
+What's the difference between msg.sender and tx.origin?
+If contract A calls B, and B calls C, in C msg.sender is B and tx.origin is A.
+
+Vulnerability
+A malicious contract can deceive the owner of a contract into calling a function that only the owner should be able to call.
+
+Preventative Techniques
+Use msg.sender instead of tx.origin
