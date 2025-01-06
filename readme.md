@@ -192,3 +192,58 @@ Math Operations (yul_add, yul_mul):
 
 Assembly math bypasses Solidity's built-in overflow checks (if not required), reducing gas consumption.
 Gas Savings: Noticeable for repeated or complex operations.
+
+
+APPLICATIONS
+
+#EtherWallet
+An example of a basic wallet.
+
+Anyone can send ETH.
+Only the owner can withdraw.
+
+#Multi-Sig Wallet
+
+The wallet owners can
+submit a transaction
+approve and revoke approval of pending transactions
+anyone can execute a transaction after enough owners has approved it.
+
+# Minimal Proxy Contract
+
+If you have a contract that will be deployed multiple times, use minimal proxy contract to deploy them cheaply.
+
+# Upgradeable Proxy
+
+Example of upgradeable proxy contract. Never use this in production.
+
+This example shows
+
+how to use delegatecall and return data when fallback is called.
+how to store address of admin and implementation in a specific slot.
+
+# Crowd Fund
+
+Crowd fund ERC20 token
+
+User creates a campaign.
+Users can pledge, transferring their token to a campaign.
+After the campaign ends, campaign creator can claim the funds if total amount pledged is more than the campaign goal.
+Otherwise, campaign did not reach it's goal, users can withdraw their pledge.
+
+# Multi Call (staticcall)
+
+An example of contract that aggregates multiple queries using a for loop and staticcall.
+
+# Multi Delegatecall
+
+An example of calling multiple functions with a single transaction, using delegatecall.
+
+# Time Lock
+
+TimeLock is a contract that publishes a transaction to be executed in the future. After a minimum waiting period, the transaction can be executed.
+
+TimeLocks are commonly used in DAOs.
+
+
+
