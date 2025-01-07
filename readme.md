@@ -330,4 +330,28 @@ Vulnerability
 A malicious contract can deceive the owner of a contract into calling a function that only the owner should be able to call.
 
 Preventative Techniques
-Use msg.sender instead of tx.origin
+Use msg.sender instead of tx.origin# Front Running
+Vulnerability
+Transactions take some time before they are mined. An attacker can watch the transaction pool and send a transaction, have it included in a block before the original transaction. This mechanism can be abused to re-order transactions to the attacker's advantage.
+
+Preventative Techniques
+use commit-reveal scheme (https://medium.com/swlh/exploring-commit-reveal-schemes-on-ethereum-c4ff5a777db8)
+use submarine send (https://libsubmarine.org/)
+Commit-Reveal Schemes
+A commitment scheme is a cryptographic algorithm used to allow someone to commit to a value while keeping it hidden from others with the ability to reveal it later. The values in a commitment scheme are binding, meaning that no one can change them once committed. The scheme has two phases: a commit phase in which a value is chosen and specified, and a reveal phase in which the value is revealed and checked.
+
+Findings
+1. In the reveal-commit scheme participant first calls commitSolution and secondly revealSolution, in two seperate transactions.
+2. Reveal-commit scheme adds complexity to the source contract, method of interaction (two tx instead of just one), consumes more time, as well as higher cost of interaction in exchange for security.
+
+Trade-Offs of Commit-Reveal
+While the scheme adds robustness to the protocol, its usability is less ideal for real-world applications that demand simplicity and low costs. Developers must carefully evaluate if the added security against front-running outweighs the drawbacks of increased complexity and user effort.
+
+Alternative solutions:
+Zero-Knowledge Proofs (ZKPs) -  require advanced cryptographic techniques
+Private Transactions - systems like Flashbots or encrypted mempools to submit his solution directly to miners without exposing it to the public transaction pool.
+
+
+
+
+
