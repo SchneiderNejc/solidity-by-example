@@ -9,4 +9,7 @@ NOT INCLUDED:
 Uni-Directional Payment Channel - Payment channels allow participants to repeatedly transfer Ether off chain.
 Bi-Directional Payment Channel - Bi-directional payment channels allow participants Alice and Bob to repeatedly transfer Ether off chain.
 
+TODO
+Deploy Different Contracts at the Same Address -> Test in practice.
+
 
