@@ -330,7 +330,29 @@ Vulnerability
 A malicious contract can deceive the owner of a contract into calling a function that only the owner should be able to call.
 
 Preventative Techniques
-Use msg.sender instead of tx.origin# Front Running
+Use msg.sender instead of tx.origin
+
+
+# Hiding Malicious Code with External Contract
+
+Vulnerability
+In Solidity any address can be casted into specific contract, even if the contract at the address is not the one being casted.
+
+This can be exploited to hide malicious code. 
+If a developer assumes that the address being cast belongs to a trusted contract but it points to a malicious contract or no contract at all, this can be exploited by an attacker to execute harmful operations or manipulate the logic.
+
+Preventative Techniques
+Initialize a new contract inside the constructor
+Make the address of external contract public so that the code of the external contract can be reviewed
+
+# Honeypot
+A honeypot is a trap to catch hackers.
+
+Vulnerability
+Combining two exploits, reentrancy and hiding malicious code, we can build a contract that will catch malicious users.
+The honeypot traps attackers by locking their deposits, but it also traps honest users' funds, which undermines its practicality.
+
+# Front Running
 Vulnerability
 Transactions take some time before they are mined. An attacker can watch the transaction pool and send a transaction, have it included in a block before the original transaction. This mechanism can be abused to re-order transactions to the attacker's advantage.
 
@@ -351,6 +373,24 @@ Alternative solutions:
 Zero-Knowledge Proofs (ZKPs) -  require advanced cryptographic techniques
 Private Transactions - systems like Flashbots or encrypted mempools to submit his solution directly to miners without exposing it to the public transaction pool.
 
+# Block Timestamp Manipulation
+
+Vulnerability
+block.timestamp can be manipulated by miners with the following constraints
+
+it cannot be stamped with an earlier time than its parent
+it cannot be too far in the future
+
+# Block Timestamp Manipulation
+Vulnerability
+block.timestamp can be manipulated by miners with the following constraints
+
+it cannot be stamped with an earlier time than its parent
+it cannot be too far in the future
+
+Preventative Techniques
+Don't use block.timestamp for a source of entropy and random number
+
 # Signature Replay
 Signing messages off-chain and having a contract that requires that signature before executing a function is a useful technique.
 
@@ -364,5 +404,35 @@ Same signature can be used multiple times to execute a function. This can be har
 Preventative Techniques
 Sign messages with nonce and address of the contract. Make sure tx can only execute once.
 
+# Bypass Contract Size Check
+Vulnerability
+If an address is a contract then the size of code stored at the address will be greater than 0 right?
+Not if the call is made from the contract during deployment (in constructor) - extcodesize will be 0.
 
+# Deploy Different Contracts at the Same Address
 
+DAO verifies out Proposal as valid. We then redeploy different contract to Proposal address.
+DAO invokes "verifies" method on our now Attack contract by using delegatecall.
+Method allows to update all state variables from DAO, as long as we know its storage layout.
+Attackers is using CREATE2 on relayer contract.
+
+# Vault Inflation
+Vulnerability
+Vault shares can be inflated by donating ERC20 token to the vault.
+
+Attacker can exploit this behavior to steal other user's deposits.
+
+Protections
+Min shares -> protects from front running
+Internal balance -> protects from donation
+Dead shares -> contract is first depositor
+Decimal offset (OpenZeppelin ERC4626)
+
+# WETH Permit
+
+Always validate assumptions about external contracts before interacting with them.
+
+This includes ensuring that:
+
+The external contract supports the expected functionality (e.g., permit).
+Calls to external contracts behave predictably and do not silently fail or trigger unintended fallback functions.
