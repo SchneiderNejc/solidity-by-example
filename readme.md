@@ -461,4 +461,8 @@ Purpose: Sets the duration of the rewards program (only callable by the owner).
 notifyRewardAmount(uint256 \_amount)
 Purpose: Updates the reward pool with new tokens and adjusts the reward rate.
 
+# Discrete Staking Rewards
 
+Differences Overview
+Staking Rewards: Rewards are distributed at a constant rate over a specified duration. The reward calculation depends on the duration, total supply, and staking amount.
+Discrete Staking Rewards: Rewards can vary dynamically over time. Each update to the reward index adjusts the amount distributed based on available rewards and the current total staked supply.
