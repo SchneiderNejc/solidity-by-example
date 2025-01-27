@@ -436,3 +436,44 @@ This includes ensuring that:
 
 The external contract supports the expected functionality (e.g., permit).
 Calls to external contracts behave predictably and do not silently fail or trigger unintended fallback functions.
+# Staking Rewards
+
+The StakingRewards contract allows users to stake an ERC20 token to earn rewards in another ERC20 token. Rewards are distributed over a specified duration, calculated proportionally to the user's staked amount and the time elapsed. The contract is simple, efficient, and includes basic admin controls for reward management.
+
+Functions
+
+1. Staking and Withdrawal
+   stake(uint256 \_amount)
+   Purpose: Allows users to deposit staking tokens into the contract.
+
+withdraw(uint256 \_amount)
+Purpose: Enables users to withdraw their staked tokens.
+
+2. Rewards Management
+   getReward()
+   Purpose: Transfers the user’s accumulated rewards to their address.
+
+earned(address \_account)
+Purpose: Calculates the total rewards earned by a user based on their staked amount.
+Return Value: The total unclaimed reward amount for the user.
+
+3. Admin Controls
+   setRewardsDuration(uint256 \_duration)
+   Purpose: Sets the duration of the rewards program (only callable by the owner).
+
+notifyRewardAmount(uint256 \_amount)
+Purpose: Updates the reward pool with new tokens and adjusts the reward rate.
+
+4. View Functions
+   lastTimeRewardApplicable()
+   Purpose: Returns the latest applicable time for calculating rewards (current block timestamp or reward program end time).
+   Return Value: The timestamp.
+
+rewardPerToken()
+Purpose: Calculates the reward per token staked since the last update.
+Return Value: The accumulated reward per token (scaled by 1e18).
+
+5. Internal Utility
+   \_min(uint256 x, uint256 y)
+   Purpose: Returns the smaller of two input values.
+   Return Value: The minimum value.
