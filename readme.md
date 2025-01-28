@@ -487,3 +487,15 @@ Purpose: Updates the reward pool with new tokens and adjusts the reward rate.
 Differences Overview
 Staking Rewards: Rewards are distributed at a constant rate over a specified duration. The reward calculation depends on the duration, total supply, and staking amount.
 Discrete Staking Rewards: Rewards can vary dynamically over time. Each update to the reward index adjusts the amount distributed based on available rewards and the current total staked supply.
+
+# Vault
+
+The Vault contract allows users to deposit tokens, which mint shares in return. These shares represent the user's stake in the vault. When users want to withdraw, they burn their shares to receive a proportional amount of the underlying tokens, including any accrued yield.
+
+\_mint(address \_to, uint256 \_shares): Mints new shares for a user and updates the total supply and the user's balance.
+
+\_burn(address \_from, uint256 \_shares): Burns shares from a user and updates the total supply and the user's balance.
+
+deposit(uint256 \_amount): Allows a user to deposit tokens, minting an equivalent amount of shares based on the token balance and total supply.
+
+withdraw(uint256 \_shares): Allows a user to withdraw tokens by burning their shares, with the amount based on the share-to-token ratio.
