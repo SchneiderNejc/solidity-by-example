@@ -3,7 +3,8 @@ pragma solidity ^0.8.26;
 
 /* First Contract
 Purpose: A multi-signature wallet where two owners must approve (via their signatures) a transaction to transfer Ether.
-Vulnerability: The same signature can be reused for multiple transactions, as there’s no mechanism to prevent replay attacks. Once the required signatures are obtained, anyone can use them repeatedly to execute the transfer function.*/
+Vulnerability: The same signature can be reused for multiple transactions, as there’s no mechanism to prevent replay attacks. 
+Once the required signatures are obtained, anyone can use them repeatedly to execute the transfer function.*/
 
 import "./ECDSA.sol";
 
