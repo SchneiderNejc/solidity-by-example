@@ -436,6 +436,27 @@ This includes ensuring that:
 
 The external contract supports the expected functionality (e.g., permit).
 Calls to external contracts behave predictably and do not silently fail or trigger unintended fallback functions.
+
+DEFI
+
+# Chainlink Price Oracle
+
+The ChainlinkPriceOracle contract fetches the latest price data for a specified asset pair (ETH/USD) using Chainlink's decentralized oracle network.
+
+Functions:
+
+getLatestPrice
+Purpose: Returns the most recent ETH/USD price in human-readable format.
+Steps:
+Calls the latestRoundData function of the Chainlink AggregatorV3Interface.
+
+Returns:
+Current ETH/USD price as an int256.
+Key Features:
+
+Dependency: Relies on the Chainlink AggregatorV3Interface at a hardcoded address for price data.
+Scaling: Chainlink prices are returned with an 8-decimal precision; this is adjusted for usability.
+
 # Staking Rewards
 
 The StakingRewards contract allows users to stake an ERC20 token to earn rewards in another ERC20 token. Rewards are distributed over a specified duration, calculated proportionally to the user's staked amount and the time elapsed. The contract is simple, efficient, and includes basic admin controls for reward management.
