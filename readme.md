@@ -193,7 +193,6 @@ Math Operations (yul_add, yul_mul):
 Assembly math bypasses Solidity's built-in overflow checks (if not required), reducing gas consumption.
 Gas Savings: Noticeable for repeated or complex operations.
 
-
 APPLICATIONS
 
 #EtherWallet
@@ -245,10 +244,10 @@ TimeLock is a contract that publishes a transaction to be executed in the future
 
 TimeLocks are commonly used in DAOs.
 
-
 HACKS
 
 # Re-Entrancy
+
 Vulnerability
 Let's say that contract A calls contract B.
 Reentracy exploit allows B to call back into A before A finishes execution.
@@ -259,6 +258,7 @@ Ensure all state changes happen before calling external contracts
 Use function modifiers that prevent re-entrancy
 
 # Arithmetic Overflow and Underflow
+
 Vulnerability
 Solidity < 0.8
 Integers in Solidity overflow / underflow without any errors
@@ -270,6 +270,7 @@ Preventative Techniques
 Use SafeMath to will prevent arithmetic overflow and underflow
 
 # Self Destruct
+
 Contracts can be deleted from the blockchain by calling selfdestruct.
 
 selfdestruct sends all remaining Ether stored in the contract to a designated address.
@@ -280,6 +281,7 @@ Preventative Techniques
 Don't rely on address(this).balance
 
 # Accessing Private Data
+
 Vulnerability
 All data on a smart contract can be read, even on unverified contract.
 
@@ -310,7 +312,6 @@ Don't use blockhash and block.timestamp as source of randomness
 The vulnerability arises because blockhash and block.timestamp are publicly accessible and deterministic.
 Both methods (JavaScript computation or reading storage slots) can bypass the need for deploying the Attack contract, demonstrating how easily the contract's logic can be exploited.
 
-
 # Denial of Service
 
 Vulnerability
@@ -332,13 +333,12 @@ A malicious contract can deceive the owner of a contract into calling a function
 Preventative Techniques
 Use msg.sender instead of tx.origin
 
-
 # Hiding Malicious Code with External Contract
 
 Vulnerability
 In Solidity any address can be casted into specific contract, even if the contract at the address is not the one being casted.
 
-This can be exploited to hide malicious code. 
+This can be exploited to hide malicious code.
 If a developer assumes that the address being cast belongs to a trusted contract but it points to a malicious contract or no contract at all, this can be exploited by an attacker to execute harmful operations or manipulate the logic.
 
 Preventative Techniques
@@ -346,6 +346,7 @@ Initialize a new contract inside the constructor
 Make the address of external contract public so that the code of the external contract can be reviewed
 
 # Honeypot
+
 A honeypot is a trap to catch hackers.
 
 Vulnerability
@@ -353,6 +354,7 @@ Combining two exploits, reentrancy and hiding malicious code, we can build a con
 The honeypot traps attackers by locking their deposits, but it also traps honest users' funds, which undermines its practicality.
 
 # Front Running
+
 Vulnerability
 Transactions take some time before they are mined. An attacker can watch the transaction pool and send a transaction, have it included in a block before the original transaction. This mechanism can be abused to re-order transactions to the attacker's advantage.
 
@@ -363,6 +365,7 @@ Commit-Reveal Schemes
 A commitment scheme is a cryptographic algorithm used to allow someone to commit to a value while keeping it hidden from others with the ability to reveal it later. The values in a commitment scheme are binding, meaning that no one can change them once committed. The scheme has two phases: a commit phase in which a value is chosen and specified, and a reveal phase in which the value is revealed and checked.
 
 Findings
+
 1. In the reveal-commit scheme participant first calls commitSolution and secondly revealSolution, in two seperate transactions.
 2. Reveal-commit scheme adds complexity to the source contract, method of interaction (two tx instead of just one), consumes more time, as well as higher cost of interaction in exchange for security.
 
@@ -370,7 +373,7 @@ Trade-Offs of Commit-Reveal
 While the scheme adds robustness to the protocol, its usability is less ideal for real-world applications that demand simplicity and low costs. Developers must carefully evaluate if the added security against front-running outweighs the drawbacks of increased complexity and user effort.
 
 Alternative solutions:
-Zero-Knowledge Proofs (ZKPs) -  require advanced cryptographic techniques
+Zero-Knowledge Proofs (ZKPs) - require advanced cryptographic techniques
 Private Transactions - systems like Flashbots or encrypted mempools to submit his solution directly to miners without exposing it to the public transaction pool.
 
 # Block Timestamp Manipulation
@@ -382,6 +385,7 @@ it cannot be stamped with an earlier time than its parent
 it cannot be too far in the future
 
 # Block Timestamp Manipulation
+
 Vulnerability
 block.timestamp can be manipulated by miners with the following constraints
 
@@ -392,6 +396,7 @@ Preventative Techniques
 Don't use block.timestamp for a source of entropy and random number
 
 # Signature Replay
+
 Signing messages off-chain and having a contract that requires that signature before executing a function is a useful technique.
 
 For example this technique is used to:
@@ -405,6 +410,7 @@ Preventative Techniques
 Sign messages with nonce and address of the contract. Make sure tx can only execute once.
 
 # Bypass Contract Size Check
+
 Vulnerability
 If an address is a contract then the size of code stored at the address will be greater than 0 right?
 Not if the call is made from the contract during deployment (in constructor) - extcodesize will be 0.
@@ -417,6 +423,7 @@ Method allows to update all state variables from DAO, as long as we know its sto
 Attackers is using CREATE2 on relayer contract.
 
 # Vault Inflation
+
 Vulnerability
 Vault shares can be inflated by donating ERC20 token to the vault.
 
@@ -499,3 +506,27 @@ The Vault contract allows users to deposit tokens, which mint shares in return. 
 deposit(uint256 \_amount): Allows a user to deposit tokens, minting an equivalent amount of shares based on the token balance and total supply.
 
 withdraw(uint256 \_shares): Allows a user to withdraw tokens by burning their shares, with the amount based on the share-to-token ratio.
+
+# Constant Sum AMM
+
+The Constant Sum AMM (CSAMM) is an Automated Market Maker that maintains the invariant X + Y = K. This means that the sum of token reserves remains constant, allowing 1:1 token swaps. It is useful for pegged assets (e.g., stablecoins) but is vulnerable to arbitrage and impermanent loss.
+
+Functions:
+
+swap(address \_tokenIn, uint256 \_amountIn) → uint256 amountOut
+Trades \_tokenIn for the other token while applying a 0.3% fee. Ensures constant sum liquidity is maintained.
+
+addLiquidity(uint256 \_amount0, uint256 \_amount1) → uint256 shares
+Adds liquidity to the pool by depositing both tokens. Mints liquidity shares based on the added amount.
+
+removeLiquidity(uint256 \_shares) → (uint256 d0, uint256 d1)
+Burns \_shares and withdraws proportional token reserves.
+
+\_update(uint256 \_res0, uint256 \_res1) (private)
+Updates the reserve balances.
+
+\_mint(address \_to, uint256 \_amount) (private)
+Mints \_amount liquidity shares for \_to.
+
+\_burn(address \_from, uint256 \_amount) (private)
+Burns \_amount liquidity shares from \_from.
