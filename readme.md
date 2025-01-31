@@ -530,3 +530,18 @@ Mints \_amount liquidity shares for \_to.
 
 \_burn(address \_from, uint256 \_amount) (private)
 Burns \_amount liquidity shares from \_from.
+
+# Constant Product Automated Market Maker
+
+The CPAMM is a decentralized liquidity pool implementing x \* y = k, ensuring that trades maintain a constant product of token reserves. It enables:
+
+Swaps between two ERC-20 tokens.
+Liquidity provisioning for users to earn fees.
+Liquidity removal with proportional asset withdrawal.
+
+Key Functionalities
+Swaps (swap) – Trades tokens using the constant product formula while applying a 0.3% fee.
+Liquidity Provision (addLiquidity) – Allows users to deposit token pairs and mint LP tokens.
+Liquidity Removal (removeLiquidity) – Burns LP tokens to redeem underlying assets.
+Internal Utility Functions (\_mint, \_burn, \_update) – Manages LP tokens and reserve updates.
+Math Helpers (\_sqrt, \_min) – Implements square root and min functions for share calculations.
