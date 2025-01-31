@@ -531,7 +531,7 @@ Mints \_amount liquidity shares for \_to.
 \_burn(address \_from, uint256 \_amount) (private)
 Burns \_amount liquidity shares from \_from.
 
-# Constant Product Automated Market Maker
+# Constant Product AMM
 
 The CPAMM is a decentralized liquidity pool implementing x \* y = k, ensuring that trades maintain a constant product of token reserves. It enables:
 
@@ -545,3 +545,34 @@ Liquidity Provision (addLiquidity) – Allows users to deposit token pairs and m
 Liquidity Removal (removeLiquidity) – Burns LP tokens to redeem underlying assets.
 Internal Utility Functions (\_mint, \_burn, \_update) – Manages LP tokens and reserve updates.
 Math Helpers (\_sqrt, \_min) – Implements square root and min functions for share calculations.
+
+# Stable Swap AMM
+
+This contract implements a stable swap automated market maker (AMM) similar to Curve Finance. It optimizes for minimal slippage when swapping between stablecoins by using a specialized invariant formula. The contract supports:
+
+Swaps between tokens using Newton's method for solving the invariant equation.
+Liquidity management, including adding/removing liquidity and withdrawing single tokens.
+Virtual price calculations to estimate LP share value.
+The invariant ensures low slippage swaps by keeping the pool balanced and adjusting token weights dynamically.
+
+Functions
+\_getD(uint256[N] memory xp) → uint256
+Computes the stable swap invariant (D) using Newton's method.
+
+\_getY(uint256 i, uint256 j, uint256 x, uint256[N] memory xp) → uint256
+Calculates the new balance of token j after swapping x of token i.
+
+swap(uint256 i, uint256 j, uint256 dx, uint256 minDy) → uint256
+Executes a token swap while enforcing the invariant and fees.
+
+addLiquidity(uint256[N] calldata amounts, uint256 minShares) → uint256
+Adds liquidity to the pool, minting LP tokens while applying imbalance fees.
+
+removeLiquidity(uint256 shares, uint256[N] calldata minAmountsOut) → uint256[N]
+Removes liquidity proportionally across all tokens.
+
+removeLiquidityOneToken(uint256 shares, uint256 i, uint256 minAmountOut) → uint256
+Withdraws liquidity in a single token, applying slippage and imbalance fees.
+
+getVirtualPrice() → uint256
+Estimates the value of 1 LP share relative to underlying tokens.
