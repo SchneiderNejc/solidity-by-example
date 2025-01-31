@@ -576,3 +576,21 @@ Withdraws liquidity in a single token, applying slippage and imbalance fees.
 
 getVirtualPrice() → uint256
 Estimates the value of 1 LP share relative to underlying tokens.
+
+# DAI Proxy
+
+DaiProxy simplifies interactions with MakerDAO's CDP (Collateralized Debt Position) system using a proxy. It allows users to:
+
+Lock ETH as collateral.
+Borrow DAI against the locked ETH.
+Repay the borrowed DAI (fully or partially).
+Unlock ETH after repaying the debt.
+It leverages the MakerDAO DssProxy system for gas-efficient, batched execution of operations.
+
+Function Descriptions:
+constructor: Deploys a MakerDAO proxy and opens a CDP for ETH-C collateral.
+lockEth(): Deposits ETH into the CDP.
+borrow(uint256 daiAmount): Mints DAI against the locked ETH.
+repay(uint256 daiAmount): Repays a specific amount of borrowed DAI.
+repayAll(): Repays all outstanding DAI in the CDP.
+unlockEth(uint256 ethAmount): Withdraws a specified amount of ETH from the CDP.
